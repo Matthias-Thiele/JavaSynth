@@ -6,7 +6,7 @@
 package de.mmth.javasynth.controls;
 
 import de.mmth.javasynth.sound.Globals;
-import de.mmth.javasynth.sound.Harmonic;
+import de.mmth.javasynth.sound.Synthesis;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -19,14 +19,17 @@ public class MainPane extends Pane {
     /**
      * Constructor
      *
-     * @param numberOfHarmonics
+     * @param numberOfHarmonics configuration parameter
      */
     public MainPane(int numberOfHarmonics) {
+        var synthesis = new Synthesis();
+        synthesis.init(numberOfHarmonics);
+
         var box = new HBox();
         box.setSpacing(30);
         box.setStyle("-fx-padding: 25px;");
-        box.getChildren().add(createControlSection());
-        box.getChildren().add(createParamsSection(numberOfHarmonics));
+        box.getChildren().add(createControlSection(synthesis));
+        box.getChildren().add(createParamsSection(synthesis));
         this.getChildren().add(box);
     }
 
@@ -34,16 +37,11 @@ public class MainPane extends Pane {
      * Creates the right side with the parameter settings
      * for the given number of harmonics.
      *
-     * @param numberOfHarmonics number of harmonics
+     * @param synthesis contains the harmonics array
      * @return JavaFx controls bound to the harmonics data
      */
-    private Node createParamsSection(int numberOfHarmonics) {
-        var harmonics = new Harmonic[numberOfHarmonics];
-        for (var i = 0; i < harmonics.length; i++) {
-            harmonics[i] = new Harmonic(i+1);
-        }
-
-        return new HarmonicsPane(harmonics);
+    private Node createParamsSection(Synthesis synthesis) {
+        return new HarmonicsPane(synthesis.getHarmonics());
     }
 
     /**
@@ -51,8 +49,7 @@ public class MainPane extends Pane {
      *
      * @return JavaFx controls bound to the globals data
      */
-    private Node createControlSection() {
-        var globals = new Globals();
-        return new GlobalParams(globals);
+    private Node createControlSection(Synthesis synthesis) {
+        return new GlobalParams(synthesis);
     }
 }

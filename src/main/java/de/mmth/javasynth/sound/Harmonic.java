@@ -11,9 +11,10 @@ package de.mmth.javasynth.sound;
  */
 public class Harmonic {
     private final int overtoneNumber;
-    private double loudness;
+    protected double loudness;
     private double decay;
     private boolean active;
+    protected double delta;
 
     /**
      * Initialize the harmonic object depending

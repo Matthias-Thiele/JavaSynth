@@ -14,6 +14,7 @@ public class Globals {
     private double attack = 0.5;
     private double sustain = 0.5;
     private double pitch = 440.0;
+    private int sampleRate = 44100;
 
     /**
      * get the loudness of the given harmonic in the range from 0 to 1
@@ -77,5 +78,14 @@ public class Globals {
      */
     public void setPitch(double pitch) {
         this.pitch = pitch;
+    }
+
+    /**
+     * Returns the sample rate in samples per second.
+     *
+     * @return sample rate
+     */
+    public  int getSampleRate() {
+        return sampleRate;
     }
 }

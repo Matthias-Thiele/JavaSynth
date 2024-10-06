@@ -6,6 +6,7 @@
 package de.mmth.javasynth.controls;
 
 import de.mmth.javasynth.sound.Globals;
+import de.mmth.javasynth.sound.Synthesis;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -20,16 +21,18 @@ import javafx.scene.paint.Color;
  */
 public class GlobalParams extends VBox {
     private final Globals globals;
+    private final Synthesis synthesis;
 
     /**
      * Constructor with injected globals data.
      * All user interface settings will be
      * bound to this object.
      *
-     * @param globals data like loudness or pitch
+     * @param synthesis data like loudness or pitch
      */
-    public GlobalParams(Globals globals) {
-        this.globals = globals;
+    public GlobalParams(Synthesis synthesis) {
+        this.synthesis = synthesis;
+        this.globals = synthesis.getGlobals();
         this.setSpacing(20.0);
         addHeader();
         addSliders();
@@ -47,6 +50,8 @@ public class GlobalParams extends VBox {
         box.setEffect(shadow);
 
         var startButton = new Button("Play");
+        startButton.setOnAction(ev -> synthesis.run());
+
         box.getChildren().add(startButton);
         this.getChildren().add(box);
     }
