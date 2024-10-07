@@ -65,7 +65,7 @@ public class Globals {
     }
 
     /**
-     * get the pitch frequency of the given harmonic in herz
+     * get the pitch frequency of the given harmonic in hertz
      * @return actual pitch
      */
     public double getPitch() {
@@ -73,7 +73,7 @@ public class Globals {
     }
 
     /**
-     * set the pitch frequency duration of the given harmonic in herz
+     * set the pitch frequency duration of the given harmonic in hertz
      * @param pitch new loudness
      */
     public void setPitch(double pitch) {
