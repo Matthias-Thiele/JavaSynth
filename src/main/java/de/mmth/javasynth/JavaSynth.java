@@ -1,6 +1,6 @@
 /**
  * JavaSynth
- *
+ * .
  * (c) 2024 Matthias Thiele
  */
 package de.mmth.javasynth;
@@ -12,8 +12,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- * Yet another Java Synthesizer
- *
+ * Yet another Java Synthesizer.
+ * .
  * Tone generation is done additive instead of the more
  * analog subtractive filter approach.
  */

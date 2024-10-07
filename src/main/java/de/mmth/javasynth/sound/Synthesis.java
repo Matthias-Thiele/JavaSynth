@@ -1,3 +1,8 @@
+/**
+ * JavaSynth
+ * .
+ * (c) 2024 Matthias Thiele
+ */
 package de.mmth.javasynth.sound;
 
 public class Synthesis {

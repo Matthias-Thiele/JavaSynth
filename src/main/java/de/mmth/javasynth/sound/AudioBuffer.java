@@ -1,6 +1,6 @@
 /**
  * JavaSynth
- *
+ * .
  * (c) 2024 Matthias Thiele
  */
 package de.mmth.javasynth.sound;
@@ -34,7 +34,7 @@ public class AudioBuffer {
     }
 
     /**
-     * Recalcs the audio byte buffer.
+     * Recalculates the audio byte buffer.
      */
     public void updateBuffer() {
         updateActiveHarmonics();

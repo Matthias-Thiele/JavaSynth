@@ -1,11 +1,10 @@
 /**
  * JavaSynth
- *
+ * .
  * (c) 2024 Matthias Thiele
  */
 package de.mmth.javasynth.controls;
 
-import de.mmth.javasynth.sound.Globals;
 import de.mmth.javasynth.sound.Synthesis;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
