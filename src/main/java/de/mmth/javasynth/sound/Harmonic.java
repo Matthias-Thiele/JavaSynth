@@ -24,7 +24,7 @@ public class Harmonic {
      */
     public Harmonic(int overtoneNumber) {
         this.overtoneNumber = overtoneNumber;
-        this.loudness = 1.0 / overtoneNumber;
+        this.loudness = 1.0 / (overtoneNumber + 1);
         this.decay = 2.0;
     }
 

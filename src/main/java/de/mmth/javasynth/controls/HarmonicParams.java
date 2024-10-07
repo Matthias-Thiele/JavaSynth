@@ -58,7 +58,7 @@ public class HarmonicParams extends Pane {
         box.setSpacing(5.0);
         var id = new Label("Harmonic " + harmonic.getOvertoneNumber());
         var activate = new CheckBox("Active");
-        activate.setSelected(true);
+        activate.setSelected(harmonic.getActive());
         activate.selectedProperty().addListener((observable, oldValue, newValue) -> harmonic.setActive(newValue));
         box.getChildren().addAll(id, activate);
         VBox.setMargin(id, stdMargin);

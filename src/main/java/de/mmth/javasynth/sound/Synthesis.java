@@ -32,4 +32,8 @@ public class Synthesis {
         System.out.println("Run");
         audioBuffer.updateBuffer();
     }
+
+    public AudioBuffer getAudioBuffer() {
+        return audioBuffer;
+    }
 }

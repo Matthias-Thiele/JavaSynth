@@ -38,7 +38,7 @@ public class AudioBuffer {
      */
     public void updateBuffer() {
         updateActiveHarmonics();
-        int seconds = (int) (globals.getAttack() + globals.getSustain() + calcToneLength());
+        int seconds = (int) (globals.getAttack() + globals.getSustain() + calcDecayLength());
         int sampleCount = seconds * globals.getSampleRate();
 
         if (buffer.length != (2 * sampleCount)) {
@@ -46,7 +46,7 @@ public class AudioBuffer {
         }
 
         for (var h: activeHarmonics) {
-            h.delta = (Math.PI * h.getOvertoneNumber() + globals.getPitch()) / globals.getSampleRate();
+            h.delta = (Math.PI * h.getOvertoneNumber() * globals.getPitch()) / globals.getSampleRate();
         }
 
         fill();
@@ -136,17 +136,13 @@ public class AudioBuffer {
      * @param bytePos first free byte buffer position
      */
     private void fillDecay(int bytePos) {
-        double harmonicLength = 0;
-        for (var h: activeHarmonics) {
-            harmonicLength = Math.max(harmonicLength, h.getDecay());
-        }
-
+        double harmonicLength = calcDecayLength();
         var length = harmonicLength * globals.getSampleRate();
-        var deltaTime = 1.0d / length;
+        var deltaTime = 1.0d / globals.getSampleRate();
         var time = 0.0d;
 
-        for (var i = 0; i < length; i++) {
-            var value = calcOneDecaySample(i, time);
+        for (var i = 1; (i < length) && (bytePos < buffer.length); i++) {
+            var value = calcOneDecaySample(i, time, globals.getLoudness());
             time += deltaTime;
             buffer[bytePos++] = (byte) value;
             buffer[bytePos++] = (byte) (value >> 8);
@@ -161,16 +157,18 @@ public class AudioBuffer {
      * @param time actual time
      * @return audio value
      */
-    private short calcOneDecaySample(int position, double time) {
+    private short calcOneDecaySample(int position, double time, double globalLoudness) {
         double sum = 0.0;
 
         for (var h: activeHarmonics) {
             if (time < h.decay) {
                 var part = Math.sin(h.delta * position) * (h.loudness * (h.decay - time) / h.decay);
+                System.out.println("decay: " + h.decay + ", time: " + time + ", factor: " + ((h.decay - time) / h.decay));
                 sum += part;
             }
         }
 
+        sum = sum * Short.MAX_VALUE * globalLoudness;
         if (sum > Short.MAX_VALUE) {
             sum = Short.MAX_VALUE;
         } else if (sum < Short.MIN_VALUE) {
@@ -195,7 +193,7 @@ public class AudioBuffer {
             sum += part;
         }
 
-        sum *= attackLoudness;
+        sum = sum * Short.MAX_VALUE * attackLoudness;
         if (sum > Short.MAX_VALUE) {
             sum = Short.MAX_VALUE;
         } else if (sum < Short.MIN_VALUE) {
@@ -206,17 +204,17 @@ public class AudioBuffer {
     }
 
     /**
-     * Calculates the tone length.
-     * Uses the length of the longest harmonic and the attack and sustain length.
+     * Calculates the decay length.
+     * Uses the length of the longest harmonic.
      *
      * @return length in seconds
      */
-    private double calcToneLength() {
+    private double calcDecayLength() {
         double harmonicLength = 0;
         for (var h: activeHarmonics) {
             harmonicLength = Math.max(harmonicLength, h.getDecay());
         }
 
-        return globals.getAttack() + globals.getSustain() + harmonicLength;
+        return harmonicLength;
     }
 }

@@ -22,6 +22,7 @@ import javafx.scene.paint.Color;
 public class GlobalParams extends VBox {
     private final Globals globals;
     private final Synthesis synthesis;
+    private Waveform waveform;
 
     /**
      * Constructor with injected globals data.
@@ -37,6 +38,12 @@ public class GlobalParams extends VBox {
         addHeader();
         addSliders();
         addActionButtons();
+        addWaveform();
+    }
+
+    private void addWaveform() {
+        waveform = new Waveform(250, 200);
+        this.getChildren().add(waveform);
     }
 
     /**
@@ -50,7 +57,7 @@ public class GlobalParams extends VBox {
         box.setEffect(shadow);
 
         var startButton = new Button("Play");
-        startButton.setOnAction(ev -> synthesis.run());
+        startButton.setOnAction(ev -> {synthesis.run(); waveform.updateView(synthesis.getAudioBuffer().getBuffer());});
 
         box.getChildren().add(startButton);
         this.getChildren().add(box);
@@ -79,7 +86,7 @@ public class GlobalParams extends VBox {
         var attack = addSlider(grid, 2,"Attack", 0.0, 10.0, globals.getAttack());
         attack.valueProperty().addListener(value -> globals.setAttack(attack.getValue()));
 
-        var sustain = addSlider(grid, 3,"Sustain", 0.0, 1.0, globals.getSustain());
+        var sustain = addSlider(grid, 3,"Sustain", 0.0, 10.0, globals.getSustain());
         sustain.valueProperty().addListener(value -> globals.setSustain(sustain.getValue()));
 
         var pitch = addSlider(grid, 4,"Pitch", 20.0, 20000.0, globals.getPitch());
