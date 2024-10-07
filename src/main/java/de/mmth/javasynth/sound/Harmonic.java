@@ -12,7 +12,7 @@ package de.mmth.javasynth.sound;
 public class Harmonic {
     private final int overtoneNumber;
     protected double loudness;
-    private double decay;
+    protected double decay;
     private boolean active;
     protected double delta;
 
