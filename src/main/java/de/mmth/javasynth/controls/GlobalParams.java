@@ -8,6 +8,7 @@ package de.mmth.javasynth.controls;
 import de.mmth.javasynth.sound.Audio;
 import de.mmth.javasynth.sound.Globals;
 import de.mmth.javasynth.sound.Synthesis;
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -80,7 +81,11 @@ public class GlobalParams extends VBox {
             audio.stopPlayer();
         });
 
-        box.getChildren().addAll(startButton, stopButton);
+        var quitButton = new Button("Quit");
+        quitButton.setOnAction(ev -> {
+            Platform.exit();
+        });
+        box.getChildren().addAll(startButton, stopButton, quitButton);
         this.getChildren().add(box);
     }
 
@@ -110,8 +115,8 @@ public class GlobalParams extends VBox {
         var sustain = addSlider(grid, 3,"Sustain", 0.0, 10.0, globals.getSustain());
         sustain.valueProperty().addListener(value -> globals.setSustain(sustain.getValue()));
 
-        var pitch = addSlider(grid, 4,"Pitch", 20.0, 20000.0, globals.getPitch());
-        sustain.valueProperty().addListener(value -> globals.setPitch(pitch.getValue()));
+        var pitch = addSlider(grid, 4,"Pitch", 20.0, 4000.0, globals.getPitch());
+        pitch.valueProperty().addListener(value -> globals.setPitch(pitch.getValue()));
 
         grid.setStyle("-fx-border-color: #808080; -fx-border-radius: 5px; -fx-background-color: #f0f0f0");
         var shadow = new DropShadow(20.0, 3.0, 3.0, new Color(0.75, 1.0, 0.75, 1.0));
