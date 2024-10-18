@@ -5,6 +5,8 @@
  */
 package de.mmth.javasynth.sound;
 
+import javax.sound.sampled.AudioFormat;
+
 /**
  * Calculates the audio byte buffer from the global
  * and harmonics parameters.
@@ -12,6 +14,7 @@ package de.mmth.javasynth.sound;
 public class AudioBuffer {
     private final Globals globals;
     private final Harmonic[] harmonics;
+    private final AudioFormat format;
     private byte[] buffer = new byte[0];
     private Harmonic[] activeHarmonics;
 
@@ -23,6 +26,9 @@ public class AudioBuffer {
     public AudioBuffer(Globals globals, Harmonic[] harmonics) {
         this.globals = globals;
         this.harmonics = harmonics;
+        format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
+                44100, 16, 1,
+                2, 44100, false);
     }
 
     /**
@@ -34,9 +40,19 @@ public class AudioBuffer {
     }
 
     /**
+     * Returns the specified audio format.
+     *
+     * @return audio format
+     */
+    public AudioFormat getFormat() {
+        return format;
+    }
+
+    /**
      * Recalculates the audio byte buffer.
      */
     public void updateBuffer() {
+        long start = System.currentTimeMillis();
         updateActiveHarmonics();
         int seconds = (int) (globals.getAttack() + globals.getSustain() + calcDecayLength());
         int sampleCount = seconds * globals.getSampleRate();
@@ -50,6 +66,8 @@ public class AudioBuffer {
         }
 
         fill();
+        long done = System.currentTimeMillis();
+        System.out.println("Generate sound (ms):" + (done - start));
     }
 
     /**
@@ -163,7 +181,6 @@ public class AudioBuffer {
         for (var h: activeHarmonics) {
             if (time < h.decay) {
                 var part = Math.sin(h.delta * position) * (h.loudness * (h.decay - time) / h.decay);
-                System.out.println("decay: " + h.decay + ", time: " + time + ", factor: " + ((h.decay - time) / h.decay));
                 sum += part;
             }
         }
@@ -217,4 +234,5 @@ public class AudioBuffer {
 
         return harmonicLength;
     }
+
 }

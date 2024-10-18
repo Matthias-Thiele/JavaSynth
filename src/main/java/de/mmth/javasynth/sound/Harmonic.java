@@ -26,6 +26,7 @@ public class Harmonic {
         this.overtoneNumber = overtoneNumber;
         this.loudness = 1.0 / (overtoneNumber + 1);
         this.decay = 2.0;
+        this.active = overtoneNumber == 1;
     }
 
     /**

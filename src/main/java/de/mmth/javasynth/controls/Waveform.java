@@ -15,7 +15,7 @@ public class Waveform extends Canvas {
     public void updateView(byte[] buffer) {
         var samples = buffer.length / 2;
         var gc = this.getGraphicsContext2D();
-        gc.setFill(Color.SILVER);
+        gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, getWidth(), getHeight());
 
         var samplesPerStep = (double)samples / getWidth();

@@ -5,6 +5,7 @@
  */
 package de.mmth.javasynth.controls;
 
+import de.mmth.javasynth.sound.Audio;
 import de.mmth.javasynth.sound.Globals;
 import de.mmth.javasynth.sound.Synthesis;
 import javafx.scene.control.Button;
@@ -12,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -23,6 +25,7 @@ public class GlobalParams extends VBox {
     private final Globals globals;
     private final Synthesis synthesis;
     private Waveform waveform;
+    private Audio audio = new Audio();
 
     /**
      * Constructor with injected globals data.
@@ -39,11 +42,18 @@ public class GlobalParams extends VBox {
         addSliders();
         addActionButtons();
         addWaveform();
+        audio.start();
     }
 
     private void addWaveform() {
+        var wavePane = new Pane();
+        wavePane.setStyle("-fx-border-color: #808080; -fx-border-radius: 5px; -fx-background-color: #f0f0f0;");
+        var shadow = new DropShadow(20.0, 3.0, 3.0, new Color(1.0, 0.75, 1.0, 1.0));
+        wavePane.setEffect(shadow);
+
         waveform = new Waveform(250, 200);
-        this.getChildren().add(waveform);
+        wavePane.getChildren().add(waveform);
+        this.getChildren().add(wavePane);
     }
 
     /**
@@ -52,14 +62,24 @@ public class GlobalParams extends VBox {
      */
     private void addActionButtons() {
         var box = new VBox();
+        box.setSpacing(5.0);
         box.setStyle("-fx-border-color: #808080; -fx-border-radius: 5px; -fx-background-color: #f0f0f0;");
         var shadow = new DropShadow(20.0, 3.0, 3.0, new Color(1.0, 1.0, 0.75, 1.0));
         box.setEffect(shadow);
 
         var startButton = new Button("Play");
-        startButton.setOnAction(ev -> {synthesis.run(); waveform.updateView(synthesis.getAudioBuffer().getBuffer());});
+        startButton.setOnAction(ev -> {
+            synthesis.run();
+            audio.playAudioBuffer(synthesis.getAudioBuffer());
+            waveform.updateView(synthesis.getAudioBuffer().getBuffer());
+        });
 
-        box.getChildren().add(startButton);
+        var stopButton = new Button("Stop");
+        stopButton.setOnAction(ev -> {
+            audio.stopPlayer();
+        });
+
+        box.getChildren().addAll(startButton, stopButton);
         this.getChildren().add(box);
     }
 
