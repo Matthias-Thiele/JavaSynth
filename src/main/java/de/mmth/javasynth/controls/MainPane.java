@@ -5,6 +5,7 @@
  */
 package de.mmth.javasynth.controls;
 
+import de.mmth.javasynth.sound.Audio;
 import de.mmth.javasynth.sound.Synthesis;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
@@ -14,6 +15,7 @@ import javafx.scene.layout.Pane;
  * Creates the JavaSynth user interface.
  */
 public class MainPane extends Pane {
+    private final Audio audio = new Audio();
 
     /**
      * Constructor
@@ -33,6 +35,13 @@ public class MainPane extends Pane {
     }
 
     /**
+     * Called by the JavaFX runtime when the application terminates.
+     */
+    public void onApplicationExit() {
+        audio.interrupt();
+    }
+
+    /**
      * Creates the right side with the parameter settings
      * for the given number of harmonics.
      *
@@ -49,6 +58,6 @@ public class MainPane extends Pane {
      * @return JavaFx controls bound to the globals data
      */
     private Node createControlSection(Synthesis synthesis) {
-        return new GlobalParams(synthesis);
+        return new GlobalParams(synthesis, audio);
     }
 }

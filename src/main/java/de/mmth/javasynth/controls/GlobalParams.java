@@ -24,8 +24,8 @@ import javafx.scene.paint.Color;
 public class GlobalParams extends VBox {
     private final Globals globals;
     private final Synthesis synthesis;
+    private final Audio audio;
     private Waveform waveform;
-    private Audio audio = new Audio();
 
     /**
      * Constructor with injected globals data.
@@ -34,8 +34,9 @@ public class GlobalParams extends VBox {
      *
      * @param synthesis data like loudness or pitch
      */
-    public GlobalParams(Synthesis synthesis) {
+    public GlobalParams(Synthesis synthesis, Audio audio) {
         this.synthesis = synthesis;
+        this.audio = audio;
         this.globals = synthesis.getGlobals();
         this.setSpacing(20.0);
         addHeader();

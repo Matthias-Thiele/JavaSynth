@@ -18,15 +18,24 @@ import javafx.stage.Stage;
  * analog subtractive filter approach.
  */
 public class JavaSynth extends Application {
+    private MainPane mainPane;
+
     @Override
     public void start(Stage stage) {
         var root = new Group();
-        root.getChildren().add(new MainPane(8));
+        mainPane = new MainPane(8);
+        root.getChildren().add(mainPane);
 
         Scene scene = new Scene(root, 1100, 550);
         stage.setTitle("JavaSynth");
         stage.setScene(scene);
         stage.show();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        mainPane.onApplicationExit();
     }
 
     public static void main(String[] args) {
